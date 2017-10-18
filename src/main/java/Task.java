@@ -1,4 +1,5 @@
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Task {
     public int getTask_id() {
@@ -37,6 +38,15 @@ public class Task {
     String description;
     private Timestamp duedate;
     private boolean complete;
+    List<User> users;
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 
     @Override
     public String toString() {
@@ -45,6 +55,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", duedate=" + duedate +
                 ", complete=" + complete +
+                ", users=" + users +
                 '}';
     }
 }

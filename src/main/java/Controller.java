@@ -11,8 +11,6 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.postgresql.ds.PGSimpleDataSource;
 
-import javax.swing.*;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -56,6 +54,16 @@ public class Controller {
         QueryRunner queryRunner = new QueryRunner(pgSimpleDataSource);
         ResultSetHandler<List<Task>> h = new BeanListHandler<Task>(Task.class);
         List<Task> tasks = queryRunner.query("SELECT * FROM tasks ORDER BY duedate asc", h);
+
+        // This is the part that deals with associative tables
+        ResultSetHandler<List<User>> userHandler = new BeanListHandler<User>(User.class);
+        for(Task t : tasks) {
+            List<User> users = queryRunner.query("SELECT tasks.*, users.* FROM user_tasks\n" +
+                    "  INNER JOIN tasks on tasks.task_id = user_tasks.task_id\n" +
+                    "  INNER JOIN users on users.id = user_tasks.user_id" +
+                    "  WHERE user_tasks.task_id = ?", userHandler, t.getTask_id());
+            t.setUsers(users);
+        }
 
         tasksView.setItems(FXCollections.observableArrayList(tasks));
         tasksView.getSelectionModel().select(idx);
