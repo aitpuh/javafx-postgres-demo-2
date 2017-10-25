@@ -1,0 +1,44 @@
+-- create tables
+create table tasks
+(
+    -- SQLSERVER do: task_id int not null primary key identity(1,1)
+	task_id serial not null constraint tasks_pkey primary key,
+	-- This change 'text' to varchar(max) for SQLServer!
+	description text,
+	-- DateTime in SQLSERVER
+	duedate timestamp,
+	-- BIT in SQLSERVER
+	complete boolean default false
+);
+
+create table users
+(
+	id integer not null constraint users_pkey primary key,
+	name varchar(25)
+);
+
+create table user_tasks
+(
+	user_id integer not null,
+	task_id integer not null,
+	constraint user_tasks_pk primary key (user_id, task_id)
+);
+
+-- insert some extra data
+
+INSERT INTO public.tasks (task_id, description, duedate, complete) VALUES (4, 'Buy Groceries', '2017-10-26 00:00:00.000000', true);
+INSERT INTO public.tasks (task_id, description, duedate, complete) VALUES (1, 'Fix car', '2017-10-10 15:56:03.227000', true);
+INSERT INTO public.tasks (task_id, description, duedate, complete) VALUES (5, 'Homework', '2017-10-11 00:00:00.000000', false);
+INSERT INTO public.tasks (task_id, description, duedate, complete) VALUES (3, 'Go the gym', '2017-10-10 00:00:00.000000', true);
+INSERT INTO public.tasks (task_id, description, duedate, complete) VALUES (2, 'Study', '2017-10-10 00:00:00.000000', false);
+INSERT INTO public.tasks (task_id, description, duedate, complete) VALUES (7, 'Procrastinate', '2017-10-18 00:00:00.000000', false);
+
+
+INSERT INTO public.users (id, name) VALUES (1, 'Chris');
+INSERT INTO public.users (id, name) VALUES (2, 'Aaron');
+
+INSERT INTO public.user_tasks (user_id, task_id) VALUES (1, 4);
+INSERT INTO public.user_tasks (user_id, task_id) VALUES (2, 4);
+
+-- apply constraints
+
